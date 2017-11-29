@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+/.vs
+/FifteenPuzzle/bin/Debug
+/FifteenPuzzle/obj
+/FifteenPuzzle/Properties
+/.gitattributes
