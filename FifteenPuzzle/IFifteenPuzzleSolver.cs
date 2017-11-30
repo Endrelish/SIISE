@@ -12,6 +12,6 @@ namespace FifteenPuzzle
         int MaxDepth { get; }
         float Time { get; }
         bool IsSolved { get; }
-        bool Solve(State state, int depth = 1);
+        void Solve(State state);
     }
 }

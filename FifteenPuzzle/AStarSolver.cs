@@ -22,5 +22,10 @@ namespace FifteenPuzzle
         {
             throw new NotImplementedException();
         }
+
+        public void Solve(State state)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,7 +16,14 @@ namespace FifteenPuzzle
 
         public float Time => throw new NotImplementedException();
 
+        public bool IsSolved => throw new NotImplementedException();
+
         public bool Solve(State state, int depth = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Solve(State state)
         {
             throw new NotImplementedException();
         }

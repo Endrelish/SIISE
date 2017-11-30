@@ -11,7 +11,7 @@ namespace FifteenPuzzle
         public static int [,] Target;
         public static char [] Order = { 'R', 'L', 'U', 'D' };
         public int [,] Current;
-        public State Parent;
+        //public State Parent;
 
         public bool IsSolved()
         {
@@ -45,10 +45,10 @@ namespace FifteenPuzzle
             }
         }
 
-        public State(int[,] current, State parent = null)
+        public State(int[,] current/*, State parent = null*/)
         {
             Current = new int[puzzleSize.SizeX, puzzleSize.SizeY];
-            Parent = parent;
+            //Parent = parent;
             Array.Copy(current, Current, puzzleSize.SizeX * puzzleSize.SizeY);
         }
         
@@ -82,7 +82,7 @@ namespace FifteenPuzzle
                     case 'L':
                         if (posX > 0)
                         {
-                            State movedState = new State(Current, this);
+                            State movedState = new State(Current);
                             movedState.Current[posX, posY] = movedState.Current[posX - 1, posY];
                             movedState.Current[posX - 1, posY] = 0;
                             moves.Add(movedState);
@@ -91,7 +91,7 @@ namespace FifteenPuzzle
                     case 'R':
                         if (posX < puzzleSize.SizeX - 1)
                         {
-                            State movedState = new State(Current, this);
+                            State movedState = new State(Current);
                             movedState.Current[posX, posY] = movedState.Current[posX + 1, posY];
                             movedState.Current[posX + 1, posY] = 0;
                             moves.Add(movedState);
@@ -100,7 +100,7 @@ namespace FifteenPuzzle
                     case 'U':
                         if (posY > 0)
                         {
-                            State movedState = new State(Current, this);
+                            State movedState = new State(Current);
                             movedState.Current[posX, posY] = movedState.Current[posX, posY - 1];
                             movedState.Current[posX, posY - 1] = 0;
                             moves.Add(movedState);
@@ -109,7 +109,7 @@ namespace FifteenPuzzle
                     case 'D':
                         if (posY < puzzleSize.SizeY - 1)
                         {
-                            State movedState = new State(Current, this);
+                            State movedState = new State(Current);
                             movedState.Current[posX, posY] = movedState.Current[posX, posY + 1];
                             movedState.Current[posX, posY + 1] = 0;
                             moves.Add(movedState);

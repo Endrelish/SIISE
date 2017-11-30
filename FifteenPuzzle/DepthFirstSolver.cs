@@ -7,8 +7,8 @@ namespace FifteenPuzzle
 {
     class DepthFirstSolver : IFifteenPuzzleSolver
     {
-        private readonly int maxDepth = 3;
-        public int MaxDepth { get { return MaxDepth; }}
+        private readonly int maxDepth = 25;
+        public int MaxDepth { get { return maxDepth; }}
         public string Solution { get; private set; }
         public int StatesChecked { get; private set; }
         public int StatesProcessed { get; private set; }
@@ -31,7 +31,7 @@ namespace FifteenPuzzle
 
             Time = stopwatch.ElapsedMilliseconds / 1000f;
         }
-        public bool Solve(State state, int depth)
+        private bool Solve(State state, int depth)
         {
             StatesChecked++;
             if (state.IsSolved()) return true;
