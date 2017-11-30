@@ -1,20 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace FifteenPuzzle
 {
     class DepthFirstSolver : IFifteenPuzzleSolver
     {
-        private const int MaxDepth = 3;
+        private readonly int maxDepth = 3;
+        public int MaxDepth { get { return MaxDepth; }}
         public string Solution { get; private set; }
+        public int StatesChecked { get; private set; }
+        public int StatesProcessed { get; private set; }
+        public float Time { get; private set; }
+        public bool IsSolved { get; private set; }
 
         public DepthFirstSolver()
         {
             Solution = "";
         }
-        public bool Solve(State state, int depth = 1)
+
+        public void Solve(State state)
         {
+            StatesChecked = 0;
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            IsSolved = Solve(state, 1);
+            stopwatch.Stop();
+
+            Time = stopwatch.ElapsedMilliseconds / 1000f;
+        }
+        public bool Solve(State state, int depth)
+        {
+            StatesChecked++;
             if (state.IsSolved()) return true;
             if (depth > MaxDepth) return false;
             var moves = state.GetMoves();

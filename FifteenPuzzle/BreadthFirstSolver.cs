@@ -8,6 +8,14 @@ namespace FifteenPuzzle
     {
         public string Solution => throw new NotImplementedException();
 
+        public int StatesChecked => throw new NotImplementedException();
+
+        public int StatesProcessed => throw new NotImplementedException();
+
+        public int MaxDepth => throw new NotImplementedException();
+
+        public float Time => throw new NotImplementedException();
+
         public bool Solve(State state, int depth = 1)
         {
             throw new NotImplementedException();

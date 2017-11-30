@@ -18,27 +18,66 @@ namespace FifteenPuzzle
             if (!SetParameters(args)) return;
             if (!SetPuzzleSolver()) return;
             State beginningState = new State(new int [0, 0]);
+
+            try { beginningState = GetBeginningState(); }
+            catch { return; }
+
+            puzzleSolver.Solve(beginningState);
+
             try
             {
-                beginningState = GetBeginningState();
+                SaveSolution();
+                SaveDetails();
             }
-            catch
-            {
-                return;
-            }
-
-            if(puzzleSolver.Solve(beginningState))
-            {
-                Console.WriteLine(puzzleSolver.Solution.Length);
-                Console.WriteLine(puzzleSolver.Solution);
-            }
-            else
-            {
-                Console.WriteLine("Solution not found.");
-            }
+            catch { return; }
 
             Console.WriteLine("okeoke");
 
+        }
+
+        private static void SaveDetails()
+        {
+            try
+            {
+                using (StreamWriter outputStream = new StreamWriter(additionalOutputFile))
+                {
+                    if(puzzleSolver.IsSolved) outputStream.WriteLine(puzzleSolver.Solution.Length);
+                    else outputStream.WriteLine("-1");
+                    outputStream.WriteLine(puzzleSolver.StatesChecked);
+                    outputStream.WriteLine(puzzleSolver.StatesProcessed);
+                    outputStream.WriteLine(puzzleSolver.MaxDepth);
+                    outputStream.WriteLine(puzzleSolver.Time);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Solution details could not be saved to file {0}", additionalOutputFile);
+            }
+        }
+
+        private static void SaveSolution()
+        {
+            string solution = puzzleSolver.Solution;
+            try
+            {
+                using (StreamWriter outputStream = new StreamWriter(outputFile))
+                {
+                    if (puzzleSolver.IsSolved)
+                    {
+                        outputStream.WriteLine(solution.Length);
+                        outputStream.WriteLine(solution);
+                    }
+                    else
+                    {
+                        outputStream.WriteLine("-1");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Solution could not be saved to file {0}.", outputFile);
+                throw e;
+            }
         }
 
         private static State GetBeginningState()
