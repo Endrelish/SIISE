@@ -47,6 +47,7 @@ namespace FifteenPuzzle
                     while (currentState.Parent != null)
                     {
                         Solution = currentState.GetMove() + Solution;
+                        currentState = currentState.Parent;
                     }
                     StatesChecked = checkedStates.Count;
                     GetDepth();
@@ -54,7 +55,7 @@ namespace FifteenPuzzle
                 }
                 else
                 {
-                    foreach(State item in state.GetMoves())
+                    foreach(State item in currentState.GetMoves())
                     {
                         if(!checkedStates.Contains(item))
                             list.Add(norm.GetNorm(item), item);
@@ -81,7 +82,7 @@ namespace FifteenPuzzle
         public void Solve(State state)
         {
             list = new SortedList<int, State>(new DuplicateComparer<int>());
-            checkedStates = new HashSet<State>();
+            checkedStates = new HashSet<State>(new StateEqualityComparer());
             Solution = "";
             StatesChecked = 0;
             StatesProcessed = 0;

@@ -160,6 +160,15 @@ namespace FifteenPuzzle
             return true;
         }
 
+        public string ToString()
+        {
+            string ret = "";
+            for (int i = 0; i < SizeX; i++)
+                for (int j = 0; j < SizeY; j++)
+                    ret += Current[i, j];
+            return ret;
+        }
+
         private class Size
         {
             public int SizeX { get; set; }

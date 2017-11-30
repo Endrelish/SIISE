@@ -35,3 +35,6 @@
 /FifteenPuzzle/obj
 /FifteenPuzzle/Properties
 /.gitattributes
+/FifteenPuzzle/puzzle.txt
+/FifteenPuzzle/4x4_01_0001_bfs_rdul_stats.txt
+/FifteenPuzzle/4x4_01_0001_bfs_rdul_sol.txt
