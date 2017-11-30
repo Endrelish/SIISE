@@ -40,6 +40,7 @@ namespace FifteenPuzzle
             {
                 var currentState = list.Values[0];
                 list.RemoveAt(0);
+                StatesProcessed++;
                 checkedStates.Add(currentState);
 
                 if (currentState.IsSolved())
@@ -51,6 +52,7 @@ namespace FifteenPuzzle
                     }
                     StatesChecked = checkedStates.Count;
                     GetDepth();
+                    StatesProcessed += list.Count;
                     return true;
                 }
                 else
@@ -91,6 +93,7 @@ namespace FifteenPuzzle
             IsSolved = SolveIfSolvable(state);
             stopwatch.Stop();
             Time = stopwatch.ElapsedMilliseconds / 1000f;
+            StatesProcessed
         }
     }
 }

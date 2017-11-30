@@ -23,6 +23,7 @@ namespace FifteenPuzzle
         public void Solve(State state)
         {
             StatesChecked = 0;
+            StatesProcessed = 1;
             Stopwatch stopwatch = new Stopwatch();
 
             stopwatch.Start();
@@ -37,6 +38,7 @@ namespace FifteenPuzzle
             if (state.IsSolved()) return true;
             if (depth > MaxDepth) return false;
             var moves = state.GetMoves();
+            StatesProcessed += moves.Count;
 
             for(int i=0; i < moves.Count; i++)
             {
