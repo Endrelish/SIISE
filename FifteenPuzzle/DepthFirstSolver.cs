@@ -42,7 +42,7 @@ namespace FifteenPuzzle
             {
                 if(Solve(moves[i], depth + 1))
                 {
-                    Solution = State.Order[i] + Solution;
+                    Solution = moves[i].GetMove() + Solution;
                     return true;
                 }
             }

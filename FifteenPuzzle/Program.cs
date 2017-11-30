@@ -32,6 +32,7 @@ namespace FifteenPuzzle
             catch { return; }
 
             Console.WriteLine("okeoke");
+            Console.ReadKey();
 
         }
 
@@ -52,6 +53,8 @@ namespace FifteenPuzzle
             catch(Exception e)
             {
                 Console.WriteLine("Solution details could not be saved to file {0}", additionalOutputFile);
+                Console.ReadKey();
+                throw e;
             }
         }
 
@@ -76,6 +79,7 @@ namespace FifteenPuzzle
             catch (Exception e)
             {
                 Console.WriteLine("Solution could not be saved to file {0}.", outputFile);
+                Console.ReadKey();
                 throw e;
             }
         }
@@ -114,6 +118,7 @@ namespace FifteenPuzzle
             {
                 Console.WriteLine("The input file could not be read.");
                 Console.WriteLine(e.Message);
+                Console.ReadKey();
                 throw e;
             }
         }
@@ -153,9 +158,11 @@ namespace FifteenPuzzle
                     break;
                 case "astr":
                     puzzleSolver = new AStarSolver();
+                    AStarSolver.SetNorm(option);
                     break;
                 default:
                     Console.WriteLine("Wrong strategy parameter.");
+                    Console.ReadKey();
                     return false;
             }
             return true;
@@ -166,6 +173,7 @@ namespace FifteenPuzzle
             if (args.Length != 5)
             {
                 Console.WriteLine("Wrong number of arguments.");
+                Console.ReadKey();
                 return false;
             }
             strategy = args[0];

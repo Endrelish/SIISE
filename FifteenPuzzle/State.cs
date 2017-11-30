@@ -8,10 +8,13 @@ namespace FifteenPuzzle
     class State
     {
         private static Size puzzleSize = new Size();
+        public static int SizeX => puzzleSize.SizeX;
+        public static int SizeY => puzzleSize.SizeY;
         public static int [,] Target;
         public static char [] Order = { 'R', 'L', 'U', 'D' };
         public int [,] Current;
-        //public State Parent;
+        public State Parent { get; }
+        public int Depth { get; }
 
         public bool IsSolved()
         {
@@ -45,13 +48,39 @@ namespace FifteenPuzzle
             }
         }
 
-        public State(int[,] current/*, State parent = null*/)
+        public State(int[,] current, State parent = null, int depth = 1)
         {
             Current = new int[puzzleSize.SizeX, puzzleSize.SizeY];
-            //Parent = parent;
+            Parent = parent;
+            Depth = depth;
             Array.Copy(current, Current, puzzleSize.SizeX * puzzleSize.SizeY);
         }
-        
+
+        public char GetMove()
+        {
+            int posX = 0, posY = 0, parPosX = 0, parPosY = 0;
+            for (int i = 0; i < State.SizeX; i++)
+                for (int j = 0; j < State.SizeY; j++)
+                {
+                    if (this.Current[i, j] == 0)
+                    {
+                        posX = i;
+                        posY = j;
+                    }
+                    if (this.Parent.Current[i, j] == 0)
+                    {
+                        parPosX = i;
+                        parPosY = j;
+                    }
+                }
+
+            if (posX > parPosX) return 'D';
+            if (posX < parPosX) return 'U';
+            if (posY > parPosY) return 'R';
+            if (posY < parPosY) return 'L';
+            return '\0';
+        }
+
 
         public List<State> GetMoves()
         {
@@ -79,37 +108,37 @@ namespace FifteenPuzzle
             {
                 switch(Order[i])
                 {
-                    case 'L':
+                    case 'U':
                         if (posX > 0)
                         {
-                            State movedState = new State(Current);
+                            State movedState = new State(Current, this);
                             movedState.Current[posX, posY] = movedState.Current[posX - 1, posY];
                             movedState.Current[posX - 1, posY] = 0;
                             moves.Add(movedState);
                         }
                         break;
-                    case 'R':
+                    case 'D':
                         if (posX < puzzleSize.SizeX - 1)
                         {
-                            State movedState = new State(Current);
+                            State movedState = new State(Current, this);
                             movedState.Current[posX, posY] = movedState.Current[posX + 1, posY];
                             movedState.Current[posX + 1, posY] = 0;
                             moves.Add(movedState);
                         }
                         break;
-                    case 'U':
+                    case 'L':
                         if (posY > 0)
                         {
-                            State movedState = new State(Current);
+                            State movedState = new State(Current, this);
                             movedState.Current[posX, posY] = movedState.Current[posX, posY - 1];
                             movedState.Current[posX, posY - 1] = 0;
                             moves.Add(movedState);
                         }
                         break;
-                    case 'D':
+                    case 'R':
                         if (posY < puzzleSize.SizeY - 1)
                         {
-                            State movedState = new State(Current);
+                            State movedState = new State(Current, this);
                             movedState.Current[posX, posY] = movedState.Current[posX, posY + 1];
                             movedState.Current[posX, posY + 1] = 0;
                             moves.Add(movedState);
@@ -119,6 +148,16 @@ namespace FifteenPuzzle
             }
 
             return moves;
+        }
+
+        public bool Equals(State other)
+        {
+            int[,] otherBoard = other.Current;
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    if (!(Current[i, j] == otherBoard[i, j]))
+                        return false;
+            return true;
         }
 
         private class Size
