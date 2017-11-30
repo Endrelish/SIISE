@@ -14,6 +14,8 @@ namespace FifteenPuzzle
         public int StatesProcessed { get; private set; }
         public float Time { get; private set; }
         public bool IsSolved { get; private set; }
+        private SortedList<int, State> list;
+        private HashSet<State> checkedStates;
 
         public DepthFirstSolver()
         {
@@ -22,30 +24,49 @@ namespace FifteenPuzzle
 
         public void Solve(State state)
         {
+            list = new SortedList<int, State>(new DuplicateComparer<int>());
+            checkedStates = new HashSet<State>(new StateEqualityComparer());
             StatesChecked = 0;
             StatesProcessed = 1;
             Stopwatch stopwatch = new Stopwatch();
 
             stopwatch.Start();
-            IsSolved = Solve(state, 1);
+            IsSolved = SolveIfSolvable(state);
             stopwatch.Stop();
 
             Time = stopwatch.ElapsedMilliseconds / 1000f;
         }
-        private bool Solve(State state, int depth)
+        private bool SolveIfSolvable(State state)
         {
+            int depth = 1;
+            State currentState;
+            list.Add(1, state);
             StatesChecked++;
             if (state.IsSolved()) return true;
-            if (depth > MaxDepth) return false;
-            var moves = state.GetMoves();
-            StatesProcessed += moves.Count;
-
-            for(int i=0; i < moves.Count; i++)
+            while(list.Keys[0] <= MaxDepth && list.Count > 0)
             {
-                if(Solve(moves[i], depth + 1))
+                currentState = list.Values[0];
+                depth = list.Keys[0];
+                list.RemoveAt(0);
+                checkedStates.Add(currentState);
+
+                if(currentState.IsSolved())
                 {
-                    Solution = moves[i].GetMove() + Solution;
+                    while(currentState.Parent != null)
+                    {
+                        Solution = currentState.GetMove() + Solution;
+                        currentState = currentState.Parent;
+                    }
+                    StatesChecked = checkedStates.Count;
                     return true;
+                }
+                else
+                {
+                    foreach(State item in currentState.GetMoves())
+                    {
+                        if (!checkedStates.Contains(item) && depth < maxDepth)
+                            list.Add(depth + 1, item);
+                    }
                 }
             }
 

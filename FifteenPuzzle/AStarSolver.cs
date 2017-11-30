@@ -93,7 +93,6 @@ namespace FifteenPuzzle
             IsSolved = SolveIfSolvable(state);
             stopwatch.Stop();
             Time = stopwatch.ElapsedMilliseconds / 1000f;
-            StatesProcessed
         }
     }
 }
