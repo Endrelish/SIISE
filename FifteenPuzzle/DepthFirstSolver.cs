@@ -14,7 +14,7 @@ namespace FifteenPuzzle
         public int StatesProcessed { get; private set; }
         public float Time { get; private set; }
         public bool IsSolved { get; private set; }
-        private SortedList<int, State> list;
+        private List<State> list;
         private HashSet<State> checkedStates;
 
         public DepthFirstSolver()
@@ -24,7 +24,7 @@ namespace FifteenPuzzle
 
         public void Solve(State state)
         {
-            list = new SortedList<int, State>(new DuplicateComparer<int>());
+            list = new List<State>();
             checkedStates = new HashSet<State>(new StateEqualityComparer());
             StatesChecked = 0;
             StatesProcessed = 1;
@@ -38,17 +38,15 @@ namespace FifteenPuzzle
         }
         private bool SolveIfSolvable(State state)
         {
-            int depth = 1;
             State currentState;
-            list.Add(1, state);
+            list.Add(state);
             StatesChecked++;
             if (state.IsSolved()) return true;
-            while(list.Keys[0] <= MaxDepth && list.Count > 0)
+            while(list.Count > 0)
             {
-                currentState = list.Values[0];
-                depth = list.Keys[0];
+                currentState = list[0];
                 list.RemoveAt(0);
-                checkedStates.Add(currentState);
+                //checkedStates.Add(currentState);
 
                 if(currentState.IsSolved())
                 {
@@ -62,11 +60,16 @@ namespace FifteenPuzzle
                 }
                 else
                 {
+                    List<State> newStates = new List<State>();
                     foreach(State item in currentState.GetMoves())
                     {
-                        if (!checkedStates.Contains(item) && depth < maxDepth)
-                            list.Add(depth + 1, item);
+                        if (/*!checkedStates.Contains(item) && */item.Depth < maxDepth)
+                        {
+                            newStates.Add(item);
+                            StatesProcessed++;
+                        }
                     }
+                    list.InsertRange(0, newStates);
                 }
             }
 
